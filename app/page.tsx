@@ -1,65 +1,103 @@
-import Image from "next/image";
+"use client";
+import React, { useEffect, useState, ReactNode } from "react";
 
-export default function Home() {
+type Theme = "light" | "dark";
+
+interface ThemeProviderProps {
+  children?: ReactNode;
+}
+
+const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+  const [theme, setTheme] = useState<Theme>("light");
+
+  useEffect(() => {
+    // Detect saved or system theme
+    const savedTheme = localStorage.getItem("theme") as Theme | null;
+    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.classList.toggle("dark", savedTheme === "dark");
+    } else if (systemPrefersDark) {
+      setTheme("dark");
+      document.documentElement.classList.add("dark");
+    }
+
+    // Listen to system changes
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      const newTheme = e.matches ? "dark" : "light";
+      setTheme(newTheme);
+      document.documentElement.classList.toggle("dark", newTheme === "dark");
+      localStorage.setItem("theme", newTheme);
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
+    localStorage.setItem("theme", newTheme);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300">
+      <header className="flex justify-between items-center p-4 border-b border-[var(--border)]">
+        <h1 className="text-xl font-bold">🌗 Advanced Theme (TS)</h1>
+        <button
+          onClick={toggleTheme}
+          className="px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--accent)] transition-transform duration-200 hover:-translate-y-1 shadow-md"
+        >
+          {theme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode"}
+        </button>
+      </header>
+
+      <main className="p-6 space-y-6">
+        {children || <DemoContent />}
       </main>
     </div>
   );
+};
+
+export default ThemeProvider;
+
+/* -------------------------------------------------------------------------- */
+/*                               Demo Components                              */
+/* -------------------------------------------------------------------------- */
+
+interface CardProps {
+  title: string;
+  accent?: boolean;
+  children: ReactNode;
 }
+
+const DemoContent: React.FC = () => {
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
+      <Card title="Primary Card">
+        This card adapts automatically to the current theme using CSS variables.
+      </Card>
+      <Card title="Accent Card" accent>
+        You can mix Tailwind classes and theme variables together easily.
+      </Card>
+    </div>
+  );
+};
+
+const Card: React.FC<CardProps> = ({ title, children, accent = false }) => {
+  return (
+    <div
+      className={`p-6 rounded-[var(--radius)] shadow-md border border-[var(--border)] ${
+        accent
+          ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
+          : "bg-[var(--secondary)] text-[var(--secondary-foreground)]"
+      }`}
+    >
+      <h2 className="text-lg font-semibold mb-2">{title}</h2>
+      <p>{children}</p>
+    </div>
+  );
+};
