@@ -1,0 +1,8 @@
+﻿export enum DeliveryStatus {
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+  AT_STORE = "AT_STORE",
+  PICKED_UP = "PICKED_UP",
+  EN_ROUTE = "EN_ROUTE",
+  DELIVERED = "DELIVERED",
+}
