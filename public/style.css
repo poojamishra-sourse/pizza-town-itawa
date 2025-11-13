@@ -1,13 +1,33 @@
-*{
+/* *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
+} */
 
-body{
-    font-family: Arial, sans-serif;
-    background-color: #e30909;
-    color: yellow;
-    line-height: 1.6;
-    padding: 20px;
+h1{
+    margin: 20px;
+    color:rgb(145, 43, 43);
+}
+hr{
+    
+    border: 5px solid rgb(145, 43, 43);
+    width: 100%;
+}
+div{
+    margin: 20px;
+    padding: 10px;
+    width: 70px;
+    background-color: rgb(145, 43, 43);
+    border-radius: 10px;
+    color: white;
+    border-width: 10px;
+    display: flex;
+    justify-content: end;
+}
+#box{
+    height: 300px;
+    width: 500px;
+    border: 2px solid black;
+    margin: 50px;
+    background-image: ;
 }
