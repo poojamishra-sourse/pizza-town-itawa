@@ -1,0 +1,44 @@
+.cart-container {
+  text-align: center;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  
+}
+
+.cart-image {
+  width: 50%;
+  max-width: 50px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  color: black;
+  margin-bottom: 10px;
+}
+
+.message {
+  font-size: 18px;
+  color: rgb(197, 52, 76);
+  margin-bottom: 10px;
+}
+
+.text {
+  font-size: 14px;
+  color:black;
+  margin-bottom: 20px;
+}
+
+.click{
+  background-color:rgb(203, 25, 55);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+
+}
+
+
+

@@ -129,7 +129,7 @@ hr {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   justify-content: space-around;
   align-items: center;
-  }
+}
 
 .items-container div img {
   height: 100px;
@@ -146,11 +146,11 @@ hr {
 .item-details {
   display: flex;
   flex-direction: column;
-  }
+}
 .item-name {
   display: flex;
   align-items: center;
-  }
+}
 .description {
   font-size: 0.8rem;
   color: gray;
@@ -185,3 +185,21 @@ hr {
   width: 25px;
   height: 25px;
 }
+.footer-content {
+  height: 100px;
+  width: 100%;
+  background-color: rgb(145, 43, 43);
+  margin-top: 50px;
+}
+.footer-text{
+  color: white;
+  text-align: center;
+  padding: 30px;
+  width: 100%;
+
+}
+/* .error {
+  color: rgb(84, 9, 9);
+  text-align: center;
+  margin-top: 10px;
+} */
